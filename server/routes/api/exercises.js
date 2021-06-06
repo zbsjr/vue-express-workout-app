@@ -9,6 +9,26 @@ router.get("/", async (req, res) => {
     res.send(await exercises.find({}).toArray());
 });
 
+// Search exercises
+router.get("/search", async (req, res) => {
+    const exercises = await loadExercisesCollection();
+    res.send(
+        await exercises
+            .find({ title: new RegExp(req.query.searchParam, "i") })
+            .toArray()
+    );
+});
+
+// Search exercise by ID
+router.get("/:id", async (req, res) => {
+    const exercises = await loadExercisesCollection();
+    res.send(
+        await exercises
+            .find({ _id: new mongodb.ObjectID(req.params.id) })
+            .toArray()
+    );
+});
+
 // Add exercise
 router.post("/", async (req, res) => {
     const exercises = await loadExercisesCollection();
